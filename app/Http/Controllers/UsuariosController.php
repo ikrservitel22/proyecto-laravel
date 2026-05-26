@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Usuarios;
 use Illuminate\Http\Request;
 use App\Models\UserPermission;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 /**
  * Controlador para la gestión de usuarios.
@@ -75,25 +76,8 @@ class UsuariosController extends Controller
                     ->where('clave', $request->clave)
                     ->first();
 
-        if (!$usuario) {
+        if (!$usuario && $request->is('/*')) {
             return redirect('/login')->with('error', 'Usuario o clave incorrectos');
-        }
-
-        if ($request->expectsJson()) {
-
-            $credentials = [
-                'usuario' => $request->usuario,
-                'password' => $request->clave
-            ];
-
-            if (!$token = JWTAuth::attempt($credentials)) {
-                return response()->json(['error' => 'No autorizado'], 401);
-            }
-
-            return response()->json([
-                'token' => $token,
-                'user' => $usuario
-            ]);
         }
 
         // Obtener rol del usuario desde la tabla intermedia
