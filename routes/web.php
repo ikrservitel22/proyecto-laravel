@@ -134,3 +134,4 @@ Route::get('/ia', [IaController::class, 'index']);
 Route::post('/ia/chat', [IaController::class, 'chat']);
 
 Route::post('/ia/audio', [IaController::class, 'audio']);
+
